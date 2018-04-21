@@ -1,5 +1,30 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.utils import IntegrityError
+
+
+class Category(models.Model):
+    name = models.CharField(
+        max_length=255,
+        unique=True
+    )
+    description = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    @property
+    def tasks(self):
+        return self.task_set.all()
+
+    @property
+    def tasks_doing(self):
+        return self.task_set.filter(done=False)
+
+    @property
+    def tasks_done(self):
+        return self.task_set.filter(done=True)
 
 
 class Task(models.Model):
@@ -10,6 +35,16 @@ class Task(models.Model):
     description = models.TextField(
         null=True,
         blank=True
+    )
+    categories = models.ManyToManyField(
+        Category
+    )
+    done = models.BooleanField(
+        default=False
+    )
+    users = models.ManyToManyField(
+        User,
+        verbose_name='Assigned Users'
     )
 
 
@@ -26,6 +61,10 @@ class LogItem(models.Model):
     )
     task = models.ForeignKey(
         Task,
+        on_delete=models.CASCADE
+    )
+    owner = models.ForeignKey(
+        User,
         on_delete=models.CASCADE
     )
     notes = models.TextField(
