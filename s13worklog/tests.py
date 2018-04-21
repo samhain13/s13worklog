@@ -37,7 +37,7 @@ class ModelTests(TestCase):
         self.user = User.objects.create_user(
             username='test-user',
             email='test-user@example.com',
-            password='test-user'
+            password='test-password'
         )
 
     def test_create_categories_and_tasks(self):
@@ -98,7 +98,41 @@ class ModelTests(TestCase):
         self.assertEqual(
             str(logitem),
             '{} - {} by {}'.format(
-                str(task), start_dt.strftime('%Y-%m-%d %H:%M'),
+                str(task),
+                start_dt.strftime('%Y-%m-%d %H:%M'),
                 self.user.username
             )
         )
+
+
+class ViewTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='test-user',
+            email='test-user@example.com',
+            password='test-password'
+        )
+
+    def test_login(self):
+        # Redirect to login page if not logged in.
+        response = c.get(reverse('worklog.dashboard'))
+        self.assertEqual(response.status_code, 302)
+        response = c.get(reverse('worklog.dashboard'), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Actual login test using the form.
+        response = c.post(
+            reverse('worklog.login'),
+            data={
+                'username': 'test-user',
+                'password': 'test-password',
+            },
+            follow=True
+        )
+        self.assertRedirects(response, reverse('worklog.dashboard'))
+
+        c.login(username='test-user', password='test-password')
+        response = c.get(reverse('worklog.dashboard'))
+        self.assertEqual(response.status_code, 200)
+        c.logout()

@@ -9,4 +9,14 @@ urlpatterns = [
         v.DevTestView.as_view(),
         name='dev-test-view'
     ),
+    path(
+        'login',
+        v.LoginView.as_view(),
+        name='worklog.login'
+    ),
+    path(
+        '',
+        v.DashboardView.as_view(),
+        name='worklog.dashboard'
+    )
 ]

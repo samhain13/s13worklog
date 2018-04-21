@@ -89,7 +89,8 @@ class LogItem(models.Model):
 
     def __str__(self):
         return '{} - {} by {}'.format(
-            str(self.task), self.start_dt.strftime('%Y-%m-%d %H:%M'),
+            str(self.task),
+            self.start_dt.strftime('%Y-%m-%d %H:%M'),
             self.owner.username
         )
 
