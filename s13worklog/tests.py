@@ -2,9 +2,11 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.urls import reverse
+from django.utils import timezone
 from django.test import Client
 from django.test import TestCase
 
@@ -32,7 +34,7 @@ class InitialTests(TestCase):
 class ModelTests(TestCase):
 
     def setUp(self):
-        u = User.objects.create_user(
+        self.user = User.objects.create_user(
             username='test-user',
             email='test-user@example.com',
             password='test-user'
@@ -41,6 +43,8 @@ class ModelTests(TestCase):
     def test_create_categories_and_tasks(self):
         task01 = Task(name='My First Task')
         task01.save()
+        # Test Task.__str__ method.
+        self.assertEqual(str(task01), task01.name)
 
         # Task names are unique (case-sensitive).
         task02 = Task(name='My First Task')
@@ -51,6 +55,8 @@ class ModelTests(TestCase):
 
         category01 = Category(name='Category 1')
         category01.save()
+        # Test Category.__str__ method.
+        self.assertEqual(str(category01), category01.name)
 
         # Category names are also unique (case-insensitive).
         category02 = Category(name='Category 1')
@@ -68,8 +74,31 @@ class ModelTests(TestCase):
         self.assertEqual(task01.categories.count(), 2)
         self.assertEqual(task02.categories.count(), 1)
 
+    def test_create_logitem(self):
+        task = Task(name='The Task')
+        task.save()
+        start_dt = timezone.now()
+        logitem = LogItem(
+            task=task,
+            start_dt=start_dt,
+            end_dt=start_dt - timezone.timedelta(hours=2),
+            owner=self.user
+        )
 
+        # Start and end datetime sanity check.
+        with transaction.atomic():
+            self.assertRaises(ValidationError, logitem.save)
+        logitem.end_dt = start_dt + timezone.timedelta(hours=2)
+        logitem.save()
 
+        # task.logs is a shortcut for task.log_items.
+        self.assertEqual(task.logs.count(), 1)
 
-
-
+        # Test LogItem.__str__ method.
+        self.assertEqual(
+            str(logitem),
+            '{} - {} by {}'.format(
+                str(task), start_dt.strftime('%Y-%m-%d %H:%M'),
+                self.user.username
+            )
+        )

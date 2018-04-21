@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.utils import IntegrityError
 
 
 class Category(models.Model):
@@ -26,6 +25,9 @@ class Category(models.Model):
     def tasks_done(self):
         return self.task_set.filter(done=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Task(models.Model):
     name = models.CharField(
@@ -47,11 +49,19 @@ class Task(models.Model):
         verbose_name='Assigned Users'
     )
 
+    @property
+    def logs(self):
+        return self.logitem_set.all()
+
+    def __str__(self):
+        return self.name
+
+    def get_user_logs(self, user):
+        return self.logitem_set.filter(owner=user)
+
 
 class LogItem(models.Model):
     start_dt = models.DateTimeField(
-        null=True,
-        blank=True,
         verbose_name='Start Date and Time'
     )
     end_dt = models.DateTimeField(
@@ -73,8 +83,15 @@ class LogItem(models.Model):
     )
 
     class Meta:
+        ordering = ['owner', 'start_dt']
         verbose_name = 'Log Item'
         verbose_name_plural = 'Log Items'
+
+    def __str__(self):
+        return '{} - {} by {}'.format(
+            str(self.task), self.start_dt.strftime('%Y-%m-%d %H:%M'),
+            self.owner.username
+        )
 
     def save(self, *args, **kwargs):
         # Sanity checks.
