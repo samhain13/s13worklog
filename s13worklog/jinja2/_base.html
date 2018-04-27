@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{{ ui_title }}</title>
+        <meta name="description" content="{{ ui_description }}" />
+        <link rel="stylesheet" href="{{ static('css', 'default.css') }}" />
+    </head>
+    <body>
+        <header>
+            <h1>{{ ui_title }}</h1>
+        </header>
+    
+    {%- set messages=get_messages(request) %}
+    {%- if messages %}
+        <section id="system-messages">
+            <h2>System Messages</h2>
+            <ul>
+        {%- for m in messages %}
+                <li{% if m.tags %} class="{{ m.tags }}"{% endif %}>{{ m }}</li>
+        {%- endfor %}
+            </ul>
+        </section>
+    {%- endif %}
+
+    {%- if not request.user.is_authenticated %}
+        <section id="form-login">
+            <h2>Log In Form</h2>
+            <form action="{{ reverse('worklog.login') }}" method="post">
+                <div class="form-group">
+                    <label for="username">Userame</label>
+                    <input type="text" id="username" name="username" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" />
+                </div>
+                <div class="form-buttons">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+        </section>
+    {%- endif %}
+        <footer>
+            <p>Here be consistent footer.</p>
+        </footer>
+    </body>
+</html>
