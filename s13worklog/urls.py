@@ -19,6 +19,8 @@ urlpatterns = [
         v.LogoutView.as_view(),
         name='worklog.logout'
     ),
+
+
     path(
         '',
         v.DashboardView.as_view(),

@@ -12,16 +12,26 @@ body {
     padding: 0px;
     min-width: 100%;
 }
+    body > header {
+        padding: 40px 10px 10px 10px;
+        text-align: center;
+    }
+    body > footer {
+        padding: 20px 10px 10px 10px;
+        text-align: center;
+    }
 
 section {
     display: block;
     margin: auto;
 }
 
-    section > h2 {
-        position: absolute;
-        clip: rect(1px, 1px, 1px, 1px);
-    }
+
+.clipped {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute;
+}
+
 
 #system-messages {
     text-align: center;

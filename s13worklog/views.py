@@ -11,6 +11,9 @@ from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 
 from .forms import LoginForm
+from .models import Category
+from .models import LogItem
+from .models import Task
 
 
 class UIContextMixin:
@@ -61,7 +64,17 @@ class LogoutView(WorkLogMixin, RedirectView):
 
 
 class DashboardView(WorkLogMixin, TemplateView):
-    template_name = 'devtestview.html'  # Change this later.
+    template_name = 'dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['latest_categories'] = \
+            Category.objects.all().order_by('-pk')[:5]
+        context['latest_tasks'] = \
+            Task.objects.all().order_by('-pk')[:10]
+        context['latest_logitems'] = \
+            LogItem.objects.all().order_by('-pk')[:25]
+        return context
 
 
 # ------------- For testing only.
