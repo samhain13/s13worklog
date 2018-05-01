@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
+from django.views.generic import ListView
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 
@@ -65,6 +66,8 @@ class LogoutView(WorkLogMixin, RedirectView):
 
 class DashboardView(WorkLogMixin, TemplateView):
     template_name = 'dashboard.html'
+    ui_description = 'S13WorkLog account overview.'
+    ui_title = 'Dashboard'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
@@ -75,6 +78,30 @@ class DashboardView(WorkLogMixin, TemplateView):
         context['latest_logitems'] = \
             LogItem.objects.all().order_by('-pk')[:25]
         return context
+
+
+# ------------- Lists.
+
+
+class CategoriesView(WorkLogMixin, ListView):
+    model = Category
+    template_name = 'devtestview.html'
+    ui_description = 'A listing of available task categories.'
+    ui_title = 'Task Categories'
+
+
+class TasksView(WorkLogMixin, ListView):
+    model = Task
+    template_name = 'devtestview.html'
+    ui_description = 'A listing of available tasks.'
+    ui_title= 'Tasks'
+
+
+class LogItemsView(WorkLogMixin, ListView):
+    model = LogItem
+    template_name = 'devtestview.html'
+    ui_description = 'A listing of available work logs.'
+    ui_title = 'Work Logs'
 
 
 # ------------- For testing only.

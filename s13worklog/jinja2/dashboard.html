@@ -1,33 +1,33 @@
 {% extends '_base.html' %}
 
 {% block ui_body %}
-<section>
+<section id="latest-categories">
     <h2>Latest Categories</h2>
     <ul>
     {%- for category in latest_categories %}
         <li><a href="#">{{ category }}</a></li>
     {%- endfor %}
-        <li><a href="#">See All</a></li>
+        <li><a href="{{ reverse('worklog.categories') }}">See All</a></li>
     </ul>
 </section>
 
-<section>
+<section id="latest-tasks">
     <h2>Latest Tasks</h2>
     <ul>
     {%- for task in latest_tasks %}
         <li><a href="#">{{ task }}</a></li>
     {%- endfor %}
-        <li><a href="#">See All</a></li>
+        <li><a href="{{ reverse('worklog.tasks') }}">See All</a></li>
     </ul>
 </section>
 
-<section>
+<section id="latest-logitems">
     <h2>Latest Logs</h2>
     <ul>
     {%- for logitem in latest_logitems %}
         <li><a href="#">{{ logitem }}</a></li>
     {%- endfor %}
-        <li><a href="#">See All</a></li>
+        <li><a href="{{ reverse('worklog.logitems') }}">See All</a></li>
     </ul>
 </section>
 {% endblock %}

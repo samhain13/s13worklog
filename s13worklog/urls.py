@@ -19,6 +19,21 @@ urlpatterns = [
         v.LogoutView.as_view(),
         name='worklog.logout'
     ),
+    path(
+        'categories',
+        v.CategoriesView.as_view(),
+        name='worklog.categories'
+    ),
+    path(
+        'tasks',
+        v.TasksView.as_view(),
+        name='worklog.tasks'
+    ),
+    path(
+        'logitems',
+        v.LogItemsView.as_view(),
+        name='worklog.logitems'
+    ),
 
 
     path(
