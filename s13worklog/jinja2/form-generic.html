@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+{% block ui_body %}
+<section>
+    <h2 class="clipped">Object Create/Update Form</h2>
+    <form action="" method="post">
+    {%- for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {%- if field.field.required %}<span>*</span>{% endif %}
+            </label>
+            {{ field }}
+        </div>
+    {%- endfor %}
+        <div class="form-buttons">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+            <input type="submit" value="{{ ui_button_text }}" />
+        </div>
+    </form>
+</section>
+{% endblock %}

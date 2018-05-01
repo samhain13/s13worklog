@@ -25,6 +25,21 @@ urlpatterns = [
         name='worklog.categories'
     ),
     path(
+        'category/create',
+        v.CategoryCreateView.as_view(),
+        name='worklog.category.create'
+    ),
+    path(
+        'category/delete/<int:pk>',
+        v.CategoryDeleteView.as_view(),
+        name='worklog.category.delete'
+    ),
+    path(
+        'category/update/<int:pk>',
+        v.CategoryUpdateView.as_view(),
+        name='worklog.category.update'
+    ),
+    path(
         'tasks',
         v.TasksView.as_view(),
         name='worklog.tasks'

@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+
+{% block ui_body %}
+<section>
+    <h2 class="clipped">Available Items</h2>
+    <ol>
+    {%- for item in object_list %}
+        <li><a href="{{ reverse(ui_action_update, args=[item.pk, ]) }}">{{ item }}</a> [<a href="{{ reverse(ui_action_delete, args=[item.pk, ]) }}">Delete</a>]</li>
+    {%- endfor %}
+        <li><a href="{{ reverse(ui_action_create) }}">Add Category</a></li>
+    </ol>
+</section>
+{% endblock %}

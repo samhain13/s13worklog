@@ -13,6 +13,10 @@ class Category(models.Model):
         blank=True
     )
 
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'Categories'
+
     @property
     def tasks(self):
         return self.task_set.all()
