@@ -16,6 +16,16 @@ body {
         padding: 40px 10px 10px 10px;
         text-align: center;
     }
+        body > header ul {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        body > header li {
+            display: inline;
+            margin: 0px 10px;
+            padding: 0px;
+        }
     body > footer {
         padding: 20px 10px 10px 10px;
         text-align: center;

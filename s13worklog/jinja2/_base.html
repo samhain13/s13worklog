@@ -9,12 +9,22 @@
     <body>
         <header>
             <h1>{{ ui_title }}</h1>
+
+        {%- if request.user.is_authenticated %}
+            <ul>
+                <li><a href="{{ reverse('worklog.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ reverse('worklog.tasks') }}">Tasks</a></li>
+                <li><a href="{{ reverse('worklog.logitems') }}">Logs</a></li>
+                <li><a href="{{ reverse('worklog.categories') }}">Categories</a></li>
+                <li><a href="{{ reverse('worklog.logout') }}">Logout</a></li>
+            </ul>
+        {%- endif %}
         </header>
     
     {%- set messages=get_messages(request) %}
     {%- if messages %}
         <section id="system-messages">
-            <h2>System Messages</h2>
+            <h2 class="clipped">System Messages</h2>
             <ul>
         {%- for m in messages %}
                 <li{% if m.tags %} class="{{ m.tags }}"{% endif %}>{{ m }}</li>

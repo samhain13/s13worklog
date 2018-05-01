@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
@@ -54,14 +55,13 @@ class LoginView(UIContextMixin, FormView):
             return self.form_invalid(form)
 
 
-class LogoutView(WorkLogMixin, RedirectView):
-    permanent = True
-    pattern_name = 'worklog.login'
-    query_string = True
+class LogoutView(WorkLogMixin, TemplateView):
+    template_name = '_base.html'
 
-    def get_redirect_url(self, **kwargs):
+    def get(self, request, *args, **kwargs):
         logout(self.request)
-        return super(LogoutView, self).get_redirect_url(**kwargs)
+        messages.success(self.request, 'Thank you for using S13WorkLog.')
+        return redirect(reverse_lazy('worklog.login'))
 
 
 class DashboardView(WorkLogMixin, TemplateView):
