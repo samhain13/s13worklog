@@ -45,6 +45,26 @@ section {
 }
 
 
+#calendar {
+    padding: 20px 0px;
+    width: 50%;
+}
+    #calendar > table {
+        width: 100%;
+    }
+
+    #calendar tbody td {
+        border: 1px rgb(200,200,200) solid;
+        height: 80px;
+        padding: 5px;
+        text-align: left;
+        vertical-align: top;
+        width: 50px;
+    }
+    #calendar tbody td.date-today {
+        background: rgb(240,250,100);
+    }
+
 #system-messages {
     text-align: center;
 }

@@ -1,3 +1,5 @@
+import calendar
+
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
@@ -6,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
 from django.views.generic import FormView
@@ -107,6 +110,7 @@ class DashboardView(WorkLogMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        context['calendar'] = self._get_calendar()
         context['latest_categories'] = \
             Category.objects.all().order_by('-pk')[:5]
         context['latest_tasks'] = \
@@ -114,6 +118,34 @@ class DashboardView(WorkLogMixin, TemplateView):
         context['latest_logitems'] = \
             LogItem.objects.all().order_by('-pk')[:25]
         return context
+
+    def _get_calendar(self):
+        '''Proviso. This will change a lot soon...'''
+
+        now = timezone.localtime()
+        year = now.year
+        month = now.month
+        ca = calendar.TextCalendar(calendar.SUNDAY)
+        rows = []
+        current_row = []
+        for num, day in enumerate(ca.itermonthdays(year, month)):
+            if num % 7 == 0:
+                if len(current_row) > 0:
+                    rows.append([x for x in current_row])
+                current_row = []
+            current_row.append({
+                'date': day
+            })
+        # Make sure we have the last row.
+        rows.append([x for x in current_row])
+        content = {
+            'rows': rows,
+            'year': year,
+            'month': month,
+            'month_name': now.strftime('%b'),
+            'date_today': now.day
+        }
+        return content
 
 
 class CategoriesView(WorkLogMixin, ListView):
@@ -166,7 +198,7 @@ class TasksView(WorkLogMixin, ListView):
     model = Task
     template_name = 'list-generic.html'
     ui_description = 'A listing of available tasks.'
-    ui_title= 'Tasks'
+    ui_title = 'Tasks'
 
 
 class TaskCreateView(WorkLogMixin, CreateView):

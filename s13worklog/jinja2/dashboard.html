@@ -1,6 +1,9 @@
 {% extends '_base.html' %}
 
 {% block ui_body %}
+    {%- if calendar %}
+        {% include 'calendar.html' %}
+    {% endif -%}
 <section id="latest-categories">
     <h2>Latest Categories</h2>
     <ul>
