@@ -1,3 +1,5 @@
+* { box-sizing: border-box; }
+
 html {
     height: 100%;
     margin: 0px;
@@ -77,19 +79,30 @@ section {
 
 /* ------------- Forms */
 form {
-    font-size: 1.3em;
+    font-size: 1.1em;
     padding: 5px;
+    width: 100%;
 }
 
-input[type="text"], input[type="password"], textarea {
+input, textarea {
     border: 1px rgb(200,200,200) solid;
+    flex-grow: 1;
     font-family: sans-serif;
     font-size: 1em;
     padding: 4px;
 }
 
+input[type="submit"], input[type="button"], input[type="rest"] {
+    color: rgb(0,0,0);
+    cursor: pointer;
+    padding: 4px 12px;
+}
+
 label {
+    background: rgb(200,200,200);
+    cursor: pointer;
     padding: 4px;
+    min-width: 30%;
 }
 
 .form-buttons {
@@ -97,13 +110,10 @@ label {
 }
 
 .form-group {
-    align-items: center;
     display: flex;
     margin-bottom: 5px;
+    width: 100%;
 }
-    .form-group > * {
-        flex-grow: 1;
-    }
 
 #form-login {
     border: 1px rgb(200,200,200) solid;

@@ -1,14 +1,14 @@
 {% extends '_base.html' %}
 
 {% block ui_body %}
-<section>
+<section id="form-generic">
     <h2 class="clipped">Object Create/Update Form</h2>
     <form action="" method="post">
     {%- for field in form %}
         <div class="form-group">
             <label for="{{ field.id_for_label }}">
                 {{ field.label }}
-                {%- if field.field.required %}<span>*</span>{% endif %}
+                {%- if field.field.required %} <span>*</span>{% endif %}
             </label>
             {{ field }}
         </div>
